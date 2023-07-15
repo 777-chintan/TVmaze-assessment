@@ -7,7 +7,7 @@ const Episode = memo(function ({ episode }) {
   const navigate = useNavigate();
   return (
     <div
-      className="relative cursor-pointer duration-200 transition hover:scale-105"
+      className="relative cursor-pointer duration-100 transition hover:scale-105"
       onClick={() => {
         navigate(`/show/${show.id}`);
       }}

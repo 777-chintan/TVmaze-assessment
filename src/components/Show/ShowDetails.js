@@ -1,8 +1,15 @@
 import moment from "moment";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
+
+// hooks
+import useTitle from "../../hooks/useTitle";
+import useSeasonsByShowId from "../../hooks/react-query/useSeasonsByShowId";
+import useEpisodesBySeasonId from "../../hooks/react-query/useEpisodesBySeasonId";
+import Loader from "../Loader";
 
 const ShowDetails = memo(function ({ show }) {
   const {
+    id,
     name,
     image,
     type,
@@ -16,6 +23,17 @@ const ShowDetails = memo(function ({ show }) {
     ...show,
   };
 
+  const { isLoading: isSeasonsLoading, data: seasons } = useSeasonsByShowId(id);
+  useTitle(`TVmaze - ${name}`);
+
+  useEffect(() => {
+    if (seasons?.data?.length) {
+      setSelectedSeason(seasons.data[0].id);
+    }
+  }, [seasons]);
+
+  const [selectedSeason, setSelectedSeason] = useState();
+
   const getItem = (label, value) => {
     return value ? (
       <>
@@ -24,6 +42,9 @@ const ShowDetails = memo(function ({ show }) {
       </>
     ) : null;
   };
+
+  const { isLoading: isEpisodesLoading, data: episodes } =
+    useEpisodesBySeasonId(selectedSeason);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -69,6 +90,44 @@ const ShowDetails = memo(function ({ show }) {
           )}
         </div>
       </div>
+      {!isSeasonsLoading ? (
+        <div className="col-span-1">
+          <div className="w-full px-4">
+            <select
+              className="text-center w-full bg-gray-600 p-2 rounded-md scroll"
+              value={selectedSeason}
+              onChange={(e) => {
+                setSelectedSeason(e.target.value);
+              }}
+            >
+              {seasons?.data?.length
+                ? seasons?.data?.map((s) => (
+                    <option
+                      value={s.id}
+                      key={s.id}
+                    >{`Season - ${s.number}`}</option>
+                  ))
+                : null}
+            </select>
+          </div>
+          {!isEpisodesLoading ? (
+            episodes?.data?.length ? (
+              <ul className="w-full px-4 text-sm font-light h-80 scroll">
+                {episodes.data?.map((e) => (
+                  <li
+                    key={e.id}
+                    className="my-1 bg-gray-700 py-2 px-2 rounded hover:bg-gray-800 transition-[background] duration-100 hover:scale-105 hover:font-normal"
+                  >
+                    {`Episode ${e?.number ? e.number : ""}: ${e.name}`}
+                  </li>
+                ))}
+              </ul>
+            ) : null
+          ) : (
+            <Loader />
+          )}
+        </div>
+      ) : null}
     </div>
   );
 });

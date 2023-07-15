@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-[#141414] text-white !scrollbar-thin !scrollbar-thumb-[#2DA398] !scrollbar-track-transparent;
+  }
+}
+
+@layer components {
+  .scroll {
+    @apply overflow-auto !scrollbar-thin !scrollbar-thumb-[#2DA398] !scrollbar-track-transparent;
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",

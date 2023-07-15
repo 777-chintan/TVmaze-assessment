@@ -18,3 +18,23 @@ export const getShowById = async (showId = "") => {
     throw error;
   }
 };
+
+export const getShowSeasonsById = async (showId = "") => {
+  try {
+    let res = await axios.get(`${TVMAZE_BASE_PATH}/shows/${showId}/seasons`);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getEpisodesBySeasonsId = async (seasonId = "") => {
+  try {
+    let res = await axios.get(
+      `${TVMAZE_BASE_PATH}/seasons/${seasonId}/episodes`
+    );
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
