@@ -1,8 +1,10 @@
 // react
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,8 +33,15 @@ function Header() {
           height={100}
           className="cursor-pointer object-contain"
         />
-        <ul className="hidden md:flex space-x-4">
-          <li className={`text-white`}>Home</li>
+        <ul className="flex space-x-4">
+          <li
+            className={`text-white cursor-pointer hover:scale-105 transition duration-200`}
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Home
+          </li>
         </ul>
       </div>
     </header>

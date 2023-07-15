@@ -9,3 +9,12 @@ export const searchShowByQuery = async (query = "") => {
     throw error;
   }
 };
+
+export const getShowById = async (showId = "") => {
+  try {
+    let res = await axios.get(`${TVMAZE_BASE_PATH}/shows/${showId}`);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};

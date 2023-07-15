@@ -1,19 +1,28 @@
 import React, { memo } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Episode = memo(function ({ episode }) {
   let { name, season, number, image, _embedded, ...rest } = { ...episode };
   let { show } = { ..._embedded };
+  const navigate = useNavigate();
   return (
     <div
       className="relative cursor-pointer duration-200 transition hover:scale-105"
-      onClick={() => {}}
+      onClick={() => {
+        navigate(`/show/${show.id}`);
+      }}
     >
       <div className="relative">
-        <img
-          crossOrigin="true"
-          src={image ? image : show?.image?.original}
-          className="rounded-sm md:rounded object-cover w-full bg-gradient-to-b h-80"
-        />
+        <picture>
+          <source src={image} />
+          <source src={show.image.original} />
+          <source src={show.image.medium} />
+          <img
+            src={show?.image?.original ? show.image.original : "error.png"}
+            loading="lazy"
+            className="rounded-sm md:rounded object-cover w-full bg-gradient-to-b h-80"
+          />
+        </picture>
         <div className="absolute bg-blue-700 text-blue-200 top-2 left-2 py-1 px-2 rounded">
           HD
         </div>

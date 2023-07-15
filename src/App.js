@@ -3,7 +3,7 @@ import ShowSearchContainer from "./components/Show/ShowSearch/ShowSearchContaine
 
 function App() {
   return (
-    <div className="mt-20 p-8 h-[150vh] text-white">
+    <div className="mt-20 p-8 text-white">
       <ShowSearchContainer />
       <EpisodeContainer />
     </div>
