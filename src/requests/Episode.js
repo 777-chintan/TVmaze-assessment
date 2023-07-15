@@ -6,7 +6,7 @@ export const getScheduledEpisode = async (date = "", country = "US") => {
     let res = await axios.get(
       `${TVMAZE_BASE_PATH}/schedule/web?date=${date}&country=${country}`
     );
-    return res.data;
+    return res;
   } catch (error) {
     throw error;
   }

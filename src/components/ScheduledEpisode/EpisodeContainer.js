@@ -1,25 +1,17 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { getScheduledEpisode } from "../../requests/Episode";
+import React, { useState } from "react";
+import moment from "moment/moment";
+
+// hooks
+import useScheduledEpisode from "../../hooks/react-query/useScheduledEpisode";
+
+// components
 import Episode from "./Episode";
 import DatePicker from "../UI/DatePicker";
 import EpisodeSkeleton from "./EpisodeSkeleton";
 
 function EpisodeContainer() {
-  const [episodes, setEpisodes] = useState();
-  const [date, setDate] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const func = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      let data = await getScheduledEpisode(date);
-      setEpisodes(data);
-    } catch (error) {}
-    setIsLoading(false);
-  }, [date]);
-  useEffect(() => {
-    func();
-  }, [date]);
+  const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
+  const { isLoading, data } = useScheduledEpisode(date);
 
   return (
     <div>
@@ -36,7 +28,7 @@ function EpisodeContainer() {
       </div>
       <div>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {isLoading && !!!episodes?.length ? (
+          {isLoading && !!!data?.data?.length ? (
             <>
               <EpisodeSkeleton />
               <EpisodeSkeleton />
@@ -46,8 +38,8 @@ function EpisodeContainer() {
               <EpisodeSkeleton />
             </>
           ) : null}
-          {episodes?.length
-            ? episodes.map((e, index) => (
+          {data?.data?.length
+            ? data.data.map((e, index) => (
                 <Episode episode={e} key={e?.id + index} />
               ))
             : null}
